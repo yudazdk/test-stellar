@@ -2,6 +2,8 @@
 
 A full-stack Task Management application built with React, TypeScript, Node.js, and Express.
 
+> **📋 Assignment Instructions**: For complete assignment details, requirements, and submission guidelines, please see [ASSIGNMENT.md](./ASSIGNMENT.md).
+
 ## Overview
 
 This is a Task Management application that allows users to:
