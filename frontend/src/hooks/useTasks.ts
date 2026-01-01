@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../services/api';
-import { Task, TEditFormData } from '@/types';
+import { Task, TEditTaskFormData } from '@/types';
 
 export const useTasks = (filters?: any) => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -24,7 +24,7 @@ export const useTasks = (filters?: any) => {
     return newTask;
   };
 
-  const updateTask = async (id: string, taskData: TEditFormData) => {
+  const updateTask = async (id: string, taskData: TEditTaskFormData) => {
     const updatedTask = await api.put(`/tasks/${id}`, taskData) as Task;
     setTasks(tasks.map((task) => (task.id === id ? updatedTask : task)));
     return updatedTask;

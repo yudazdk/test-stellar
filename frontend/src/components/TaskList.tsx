@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { Task, TEditFormData } from '@/types';
+import { Task, TEditTaskFormData } from '@/types';
 
 interface ITaskListProps {
   filters?: any;
   tasks: Task[];
   loading: boolean;
-  updateTask: (id: string, taskData: TEditFormData) => Promise<Task>;
+  updateTask: (id: string, taskData: TEditTaskFormData) => Promise<Task>;
   deleteTask: (id: string) => Promise<void>;
 }
 
 export const TaskList = ({ filters, tasks, loading, updateTask, deleteTask }: ITaskListProps) => {
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editFormData, setEditFormData] = useState<Partial<TEditFormData>>({});
+  const [editFormData, setEditFormData] = useState<Partial<TEditTaskFormData>>({});
 
   const handleEditClick = (task: Task) => {
     setEditingId(task.id);
@@ -30,7 +30,7 @@ export const TaskList = ({ filters, tasks, loading, updateTask, deleteTask }: IT
 
   const handleSaveEdit = async (taskId: string) => {
     try {
-      await updateTask(taskId, editFormData as TEditFormData);
+      await updateTask(taskId, editFormData as TEditTaskFormData);
       setEditingId(null);
       setEditFormData({});
     } catch (error) {

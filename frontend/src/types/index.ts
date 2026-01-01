@@ -38,7 +38,7 @@ export interface LoginResponse {
   token: string;
 }
 
-export type TEditFormData = Pick<Task, 'title' | 'description' | 'status' | 'priority'>;
+export type TEditTaskFormData = Pick<Task, 'title' | 'description' | 'status' | 'priority'>;
 
 export type TRegisterResponse = LoginResponse;
 
