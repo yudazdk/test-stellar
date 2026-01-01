@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TaskList } from '../components/TaskList';
-import { TaskForm } from '../components/TaskForm';
-import { useTasks } from '../hooks/useTasks';
-import { useAuth } from '../hooks/useAuth';
+import { TaskList } from '@/components/TaskList';
+import { TaskForm } from '@/components/TaskForm';
+import { useTasks, useAuth } from '@/hooks';
 
 export const Dashboard = () => {
   const [showForm, setShowForm] = useState(false);
   const [filters, setFilters] = useState({});
-  const { createTask } = useTasks();
+  const { createTask, tasks, loading, updateTask, deleteTask } = useTasks();
   const { logout, user } = useAuth();
   const navigate = useNavigate();
 
@@ -58,7 +57,13 @@ export const Dashboard = () => {
 
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Tasks</h2>
-          <TaskList filters={filters} />
+          <TaskList 
+            filters={filters} 
+            tasks={tasks} 
+            loading={loading}
+            updateTask={updateTask}
+            deleteTask={deleteTask} 
+          />
         </div>
       </div>
     </div>
