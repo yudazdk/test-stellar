@@ -28,5 +28,19 @@ export interface Comment {
   user?: any;
 }
 
+export interface ILoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  user: User;
+  token: string;
+}
+
+export type TRegisterResponse = LoginResponse;
+
+export type Nullable<T> = T | null;
+
 export type ApiResponse = any;
 

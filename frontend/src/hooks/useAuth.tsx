@@ -1,18 +1,19 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { api } from '../services/api';
+import { api } from '@/services/api';
+import { LoginResponse, Nullable, TRegisterResponse, User } from '@/types';
 
 type AuthContextValue = {
-  user: any;
+  user: Nullable<User>;
   loading: boolean;
-  login: (email: string, password: string) => Promise<any>;
-  register: (userData: any) => Promise<any>;
+  login: (email: string, password: string) => Promise<LoginResponse>;
+  register: (userData: User) => Promise<TRegisterResponse>;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<Nullable<User>>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,15 +38,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const data = await api.post('/auth/login', { email, password });
+    const data = await api.post('/auth/login', { email, password }) as LoginResponse;
     localStorage.setItem('token', data.token);
     setUser(data.user);
     setLoading(false);
     return data;
   };
 
-  const register = async (userData: any) => {
-    const data = await api.post('/auth/register', userData);
+  const register = async (userData: User) => {
+    const data = await api.post('/auth/register', userData) as TRegisterResponse;
     localStorage.setItem('token', data.token);
     setUser(data.user);
     setLoading(false);
