@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { api } from '@/services/api';
-import { LoginResponse, Nullable, TRegisterResponse, User } from '@/types';
+import { LoginResponse, Nullable, TRegisterRequest, TRegisterResponse, User } from '@/types';
 
 type AuthContextValue = {
   user: Nullable<User>;
   loading: boolean;
   login: (email: string, password: string) => Promise<LoginResponse>;
-  register: (userData: User) => Promise<TRegisterResponse>;
+  register: (userData: TRegisterRequest) => Promise<TRegisterResponse>;
   logout: () => void;
 };
 
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const fetchUser = async () => {
       try {
-        const data: any = await api.get('/auth/me');
+        const data = await api.get('/auth/me') as { user: User };
         setUser(data.user);
       } catch {
         localStorage.removeItem('token');
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return data;
   };
 
-  const register = async (userData: User) => {
+  const register = async (userData: TRegisterRequest) => {
     const data = await api.post('/auth/register', userData) as TRegisterResponse;
     localStorage.setItem('token', data.token);
     setUser(data.user);

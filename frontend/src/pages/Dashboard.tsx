@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { TaskList } from '@/components/TaskList';
 import { TaskForm } from '@/components/TaskForm';
 import { useTasks, useAuth } from '@/hooks';
+import { TTaskFormData } from '@/types';
 
 export const Dashboard = () => {
   const [showForm, setShowForm] = useState(false);
@@ -11,7 +12,7 @@ export const Dashboard = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
 
-  const handleCreateTask = async (taskData: any) => {
+  const handleCreateTask = async (taskData: TTaskFormData) => {
     await createTask(taskData);
     setShowForm(false);
   };

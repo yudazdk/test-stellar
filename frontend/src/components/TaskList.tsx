@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { Task, TEditTaskFormData } from '@/types';
+import { Task, TTaskFormData } from '@/types';
 
 interface ITaskListProps {
   filters?: any;
   tasks: Task[];
   loading: boolean;
-  updateTask: (id: string, taskData: TEditTaskFormData) => Promise<Task>;
+  updateTask: (id: string, taskData: TTaskFormData) => Promise<Task>;
   deleteTask: (id: string) => Promise<void>;
 }
 
 export const TaskList = ({ filters, tasks, loading, updateTask, deleteTask }: ITaskListProps) => {
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editFormData, setEditFormData] = useState<Partial<TEditTaskFormData>>({});
+  const [editFormData, setEditFormData] = useState<Partial<TTaskFormData>>({});
 
   const handleEditClick = (task: Task) => {
     setEditingId(task.id);
@@ -30,7 +30,7 @@ export const TaskList = ({ filters, tasks, loading, updateTask, deleteTask }: IT
 
   const handleSaveEdit = async (taskId: string) => {
     try {
-      await updateTask(taskId, editFormData as TEditTaskFormData);
+      await updateTask(taskId, editFormData as TTaskFormData);
       setEditingId(null);
       setEditFormData({});
     } catch (error) {
@@ -51,7 +51,7 @@ export const TaskList = ({ filters, tasks, loading, updateTask, deleteTask }: IT
 
   return (
     <div className="space-y-4">
-      {tasks.map((task: any) => (
+      {tasks.map((task) => (
         <div
           key={task.id}
           className="border rounded-lg p-4 hover:shadow-md transition-shadow"

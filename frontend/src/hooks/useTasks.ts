@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { api } from '../services/api';
-import { Task, TEditTaskFormData } from '@/types';
+import { api } from '@/services/api';
+import { Task, TTaskFormData } from '@/types';
 
 export const useTasks = (filters?: any) => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -18,13 +18,13 @@ export const useTasks = (filters?: any) => {
     setLoading(false);
   };
 
-  const createTask = async (taskData: Task) => {
+  const createTask = async (taskData: TTaskFormData) => {
     const newTask = await api.post('/tasks', taskData) as Task;
     setTasks([...tasks, newTask]);
     return newTask;
   };
 
-  const updateTask = async (id: string, taskData: TEditTaskFormData) => {
+  const updateTask = async (id: string, taskData: TTaskFormData) => {
     const updatedTask = await api.put(`/tasks/${id}`, taskData) as Task;
     setTasks(tasks.map((task) => (task.id === id ? updatedTask : task)));
     return updatedTask;

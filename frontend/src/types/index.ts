@@ -14,7 +14,7 @@ export interface Task {
   userId: string;
   createdAt: string;
   updatedAt: string;
-  user?: any;
+  user?: User;
   assignments?: any[];
   comments?: any[];
 }
@@ -25,7 +25,7 @@ export interface Comment {
   taskId: string;
   userId: string;
   createdAt: string;
-  user?: any;
+  user?: User;
 }
 
 export interface ILoginRequest {
@@ -38,7 +38,9 @@ export interface LoginResponse {
   token: string;
 }
 
-export type TEditTaskFormData = Pick<Task, 'title' | 'description' | 'status' | 'priority'>;
+export type TRegisterRequest = Omit<User, 'id'> & { password: string };
+
+export type TTaskFormData = Pick<Task, 'title' | 'description' | 'status' | 'priority'>;
 
 export type TRegisterResponse = LoginResponse;
 

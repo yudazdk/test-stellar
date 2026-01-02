@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-
+import { TRegisterRequest } from '@/types';
 export const Register = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TRegisterRequest>({
     email: '',
     username: '',
     password: '',
@@ -12,14 +12,14 @@ export const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await register(formData);
     navigate('/dashboard');

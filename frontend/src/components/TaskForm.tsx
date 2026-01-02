@@ -1,6 +1,12 @@
 import { useState } from 'react';
+import { TTaskFormData } from '@/types';
 
-export const TaskForm = ({ onSubmit, initialData }: any) => {
+interface ITaskFormProps {
+  onSubmit: (data: TTaskFormData) => void;
+  initialData?: TTaskFormData;
+}
+
+export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     description: initialData?.description || '',
@@ -8,14 +14,14 @@ export const TaskForm = ({ onSubmit, initialData }: any) => {
     priority: initialData?.priority || 'MEDIUM',
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(formData);
   };
