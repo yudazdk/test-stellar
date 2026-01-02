@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Task, TTaskFormData } from '@/types';
+import { statusOptions, priorityOptions } from '@/constants';
 
 interface ITaskListProps {
   filters?: any;
@@ -54,65 +55,69 @@ export const TaskList = ({ filters, tasks, loading, updateTask, deleteTask }: IT
       {tasks.map((task) => (
         <div
           key={task.id}
-          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+          className="p-4 transition-shadow border rounded-lg hover:shadow-md"
         >
           {editingId === task.id ? (
             // Edit mode
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Title</label>
+                <label className="block mb-1 text-sm font-medium">Title</label>
                 <input
                   type="text"
                   value={editFormData.title}
                   onChange={(e) => handleInputChange('title', e.target.value)}
-                  className="w-full border rounded px-3 py-2"
+                  className="w-full px-3 py-2 border rounded"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Description</label>
+                <label className="block mb-1 text-sm font-medium">Description</label>
                 <textarea
                   value={editFormData.description}
                   onChange={(e) => handleInputChange('description', e.target.value)}
-                  className="w-full border rounded px-3 py-2"
+                  className="w-full px-3 py-2 border rounded dark:text-white"
                   rows={3}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Status</label>
+                  <label className="block mb-1 text-sm font-medium">Status</label>
                   <select
                     value={editFormData.status}
                     onChange={(e) => handleInputChange('status', e.target.value)}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full px-3 py-2 border rounded"
                   >
-                    <option value="TODO">TODO</option>
-                    <option value="IN_PROGRESS">IN_PROGRESS</option>
-                    <option value="DONE">DONE</option>
+                    {statusOptions.map((status) => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Priority</label>
+                  <label className="block mb-1 text-sm font-medium">Priority</label>
                   <select
                     value={editFormData.priority}
                     onChange={(e) => handleInputChange('priority', e.target.value)}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full px-3 py-2 border rounded"
                   >
-                    <option value="LOW">LOW</option>
-                    <option value="MEDIUM">MEDIUM</option>
-                    <option value="HIGH">HIGH</option>
+                    {priorityOptions.map((priority) => (
+                      <option key={priority} value={priority}>
+                        {priority}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
-              <div className="flex gap-2 justify-end">
+              <div className="flex justify-end gap-2">
                 <button
                   onClick={handleCancelEdit}
-                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                  className="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => handleSaveEdit(task.id)}
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
                 >
                   Save
                 </button>
@@ -120,15 +125,15 @@ export const TaskList = ({ filters, tasks, loading, updateTask, deleteTask }: IT
             </div>
           ) : (
             // View mode
-            <div className="flex justify-between items-start">
+            <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3 className="font-semibold text-lg">{task.title}</h3>
-                <p className="text-gray-600 mt-1" dangerouslySetInnerHTML={{ __html: task.description || '' }}></p>
+                <h3 className="text-lg font-semibold">{task.title}</h3>
+                <p className="mt-1 text-gray-600 dark:text-white" dangerouslySetInnerHTML={{ __html: task.description || '' }}></p>
                 <div className="flex gap-2 mt-2">
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                  <span className="px-2 py-1 text-sm text-blue-800 bg-blue-100 rounded">
                     {task.status}
                   </span>
-                  <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-sm">
+                  <span className="px-2 py-1 text-sm text-gray-800 bg-gray-100 rounded">
                     {task.priority}
                   </span>
                 </div>
@@ -136,13 +141,13 @@ export const TaskList = ({ filters, tasks, loading, updateTask, deleteTask }: IT
               <div className="flex gap-2">
                 <button
                   onClick={() => handleEditClick(task)}
-                  className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => deleteTask(task.id)}
-                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                  className="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600"
                 >
                   Delete
                 </button>
