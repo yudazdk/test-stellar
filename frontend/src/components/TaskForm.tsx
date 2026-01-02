@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TTaskFormData } from '@/types';
+import { TTaskFormData, TaskPriority, TaskStatus } from '@/types';
 
 interface ITaskFormProps {
   onSubmit: (data: TTaskFormData) => void;
@@ -7,12 +7,15 @@ interface ITaskFormProps {
 }
 
 export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TTaskFormData>({
     title: initialData?.title || '',
     description: initialData?.description || '',
     status: initialData?.status || 'TODO',
     priority: initialData?.priority || 'MEDIUM',
   });
+
+  const statusOptions: TaskStatus[] = ['TODO', 'IN_PROGRESS', 'DONE'];
+  const priorityOptions: TaskPriority[] = ['LOW', 'MEDIUM', 'HIGH'];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -56,9 +59,11 @@ export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
           onChange={handleChange}
           className="w-full border rounded px-3 py-2"
         >
-          <option value="TODO">TODO</option>
-          <option value="IN_PROGRESS">IN_PROGRESS</option>
-          <option value="DONE">DONE</option>
+          {statusOptions.map((status) => (
+            <option key={status} value={status}>
+              {status}
+            </option>
+          ))}
         </select>
       </div>
       <div>
@@ -69,9 +74,11 @@ export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
           onChange={handleChange}
           className="w-full border rounded px-3 py-2"
         >
-          <option value="LOW">LOW</option>
-          <option value="MEDIUM">MEDIUM</option>
-          <option value="HIGH">HIGH</option>
+          {priorityOptions.map((priority) => (
+            <option key={priority} value={priority}>
+              {priority}
+            </option>
+          ))}
         </select>
       </div>
       <button
