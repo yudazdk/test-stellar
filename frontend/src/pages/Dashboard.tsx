@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TaskList } from '@/components/TaskList';
 import { TaskForm } from '@/components/TaskForm';
+import Conditional from '@/components/Conditional';
 import { useTasks, useAuth } from '@/hooks';
 import { TTaskFormData } from '@/types';
 
@@ -50,12 +51,12 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {showForm && (
+        <Conditional show={showForm}>
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <TaskForm onSubmit={handleCreateTask} />
           </div>
-        )}
-
+        </Conditional>
+        
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Tasks</h2>
           <TaskList 
