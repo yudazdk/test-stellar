@@ -5,6 +5,7 @@ interface IConditionalProps {
   children: ReactNode;
 }
 
+// Renders children only when `show` is true; otherwise returns null
 export default function Conditional({ show, children }: IConditionalProps) {
   if (!show) {
     return null;
