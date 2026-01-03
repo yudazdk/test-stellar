@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { api } from '@/services/api';
-import { Task, TaskFilters, TTaskFormData } from '@/types';
+import { Task, TTaskFormData } from '@/types';
 
-export const useTasks = (filters?: TaskFilters) => {
+export const useTasks = (filters?: any) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,12 +13,8 @@ export const useTasks = (filters?: TaskFilters) => {
   const fetchTasks = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (filters?.status) params.set('status', filters.status);
-      if (filters?.priority) params.set('priority', filters.priority);
-      if (filters?.q) params.set('q', filters.q);
-      const query = params.toString();
-      const data = await api.get(`/tasks${query ? `?${query}` : ''}`) as Task[];
+      const queryParams = new URLSearchParams(filters || {}).toString();
+      const data = await api.get(`/tasks?${queryParams}`) as Task[];
       setTasks(data);
     } catch (error) {
       console.error('Failed to fetch tasks', error);
