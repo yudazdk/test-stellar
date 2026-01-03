@@ -37,7 +37,7 @@ export const Dashboard = () => {
 
   // Implement AutoLogout (e.g., 15 minutes)
   useAutoLogout({ 
-    timeoutInMinutes: 0.5, 
+    timeoutInMinutes: 15, 
     onIdle: () => setShowIdleTimeModal(true), 
   });
 
