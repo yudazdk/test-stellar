@@ -69,6 +69,7 @@ export const Dashboard = () => {
 
   const clearFilters = () => {
     setFilters({ status: '', priority: '', q: '' });
+    setPresetName('');
   };
 
   const savePreset = () => {
@@ -194,7 +195,7 @@ export const Dashboard = () => {
             {presets.length > 0 && (
               <select
                 onChange={(e) => applyPreset(e.target.value)}
-                defaultValue=""
+                value={presetName}
                 className="px-3 py-2 text-sm bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
               >
                 <option value="" disabled>Apply preset</option>
