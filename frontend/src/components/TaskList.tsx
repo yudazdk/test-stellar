@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Task, TTaskFormData } from '@/types';
 import { statusOptions, priorityOptions } from '@/constants';
 import Modal from '@/components/Modal';
+import Spinner from '@/components/spinner/Spinner';
 
 import './taskForm.css';
 
@@ -75,7 +76,7 @@ export const TaskList = ({ tasks, loading, updateTask, deleteTask }: ITaskListPr
   }
 
   if (loading) {
-    return <div className="p-4">Loading tasks...</div>;
+    return <Modal show={loading}><Spinner size={60} /></Modal>;
   }
 
   return (
