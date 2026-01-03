@@ -145,7 +145,7 @@ export const TaskList = ({ tasks, loading, updateTask, deleteTask }: ITaskListPr
               </div>
             ) : (
               // View mode
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between dark:bg-slate-700">
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold">{task.title}</h3>
                   <p className="mt-1 text-gray-600 dark:text-white" dangerouslySetInnerHTML={{ __html: task.description || '' }}></p>

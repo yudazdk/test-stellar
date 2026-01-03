@@ -64,7 +64,7 @@ export const Dashboard = () => {
         </div>  
 
         <Conditional show={showForm}>
-          <div className="p-6 mb-8 bg-white rounded-lg shadow-md">
+          <div className="p-6 mb-8 bg-white rounded-lg shadow-md dark:bg-black dark:text-white">
             <TaskForm onSubmit={handleCreateTask} />
           </div>
         </Conditional>

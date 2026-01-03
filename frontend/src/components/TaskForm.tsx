@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { TTaskFormData, TaskPriority, TaskStatus } from '@/types';
 
+import './taskForm.css';
+
 interface ITaskFormProps {
   onSubmit: (data: TTaskFormData) => void;
   initialData?: TTaskFormData;
@@ -30,64 +32,64 @@ export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium mb-1">Title</label>
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium mb-1">Description</label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
-          rows={4}
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium mb-1">Status</label>
-        <select
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
+    <div className="p-6 mb-8 transition-colors duration-300 bg-white rounded-lg shadow-md dark:bg-slate-800 form-wrapper">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label>Title</label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+          />
+        </div>
+        <div>
+          <label>Description</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded dark:text-white dark:bg-slate-700"
+            rows={4}
+          />
+        </div>
+        <div>
+          <label>Status</label>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+          >
+            {statusOptions.map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>Priority</label>
+          <select
+            name="priority"
+            value={formData.priority}
+            onChange={handleChange}
+          >
+            {priorityOptions.map((priority) => (
+              <option key={priority} value={priority}>
+                {priority}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button
+          type="submit"
+          className="w-full py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
-          {statusOptions.map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label className="block text-sm font-medium mb-1">Priority</label>
-        <select
-          name="priority"
-          value={formData.priority}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
-        >
-          {priorityOptions.map((priority) => (
-            <option key={priority} value={priority}>
-              {priority}
-            </option>
-          ))}
-        </select>
-      </div>
-      <button
-        type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-      >
-        {initialData ? 'Update Task' : 'Create Task'}
-      </button>
-    </form>
+          {initialData ? 'Update Task' : 'Create Task'}
+        </button>
+      </form>
+    </div>
   );
 };
 
