@@ -12,27 +12,47 @@ export const useTasks = (filters?: any) => {
 
   const fetchTasks = async () => {
     setLoading(true);
-    const queryParams = new URLSearchParams(filters || {}).toString();
-    const data = await api.get(`/tasks?${queryParams}`) as Task[];
-    setTasks(data);
-    setLoading(false);
+    try {
+      const queryParams = new URLSearchParams(filters || {}).toString();
+      const data = await api.get(`/tasks?${queryParams}`) as Task[];
+      setTasks(data);
+    } catch (error) {
+      console.error('Failed to fetch tasks', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const createTask = async (taskData: TTaskFormData) => {
-    const newTask = await api.post('/tasks', taskData) as Task;
-    setTasks([...tasks, newTask]);
-    return newTask;
+    try {
+      const newTask = await api.post('/tasks', taskData) as Task;
+      setTasks([...tasks, newTask]);
+      return newTask;
+    } catch (error) {
+      console.error('Failed to create task', error);
+      throw error;
+    }
   };
 
   const updateTask = async (id: string, taskData: TTaskFormData) => {
-    const updatedTask = await api.put(`/tasks/${id}`, taskData) as Task;
-    setTasks(tasks.map((task) => (task.id === id ? updatedTask : task)));
-    return updatedTask;
+    try {
+      const updatedTask = (await api.put(`/tasks/${id}`, taskData)) as Task;
+      setTasks(tasks.map((task) => (task.id === id ? updatedTask : task)));
+      return updatedTask;
+    } catch (error) {
+      console.error('Failed to update task', error);
+      throw error;
+    }
   };
 
   const deleteTask = async (id: string) => {
-    await api.delete(`/tasks/${id}`);
-    setTasks(tasks.filter((task) => task.id !== id));
+    try {
+      await api.delete(`/tasks/${id}`);
+      setTasks(tasks.filter((task) => task.id !== id));
+    } catch (error) {
+      console.error('Failed to delete task', error);
+      throw error;
+    }
   };
 
   return {

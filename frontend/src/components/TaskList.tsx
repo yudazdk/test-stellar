@@ -42,17 +42,22 @@ export const TaskList = ({ tasks, loading, updateTask, deleteTask }: ITaskListPr
     }
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setEditFormData({
-      ...editFormData,
+  const handleInputChange = (field: keyof TTaskFormData, value: string) => {
+    setEditFormData(prevFormData => ({
+      ...prevFormData,
       [field]: value,
-    });
+    }));
   };
 
   async function handleDelete() {
-    setShowConfirmDelete(false);
-    await deleteTask(taskIdToDeleteRef.current);
-    taskIdToDeleteRef.current = "";
+    try {
+      setShowConfirmDelete(false);
+      await deleteTask(taskIdToDeleteRef.current);
+    } catch (error) {
+      console.error('Failed to delete task:', error);
+    } finally {
+      taskIdToDeleteRef.current = "";
+    }
   }
 
   function cancelDelete() {

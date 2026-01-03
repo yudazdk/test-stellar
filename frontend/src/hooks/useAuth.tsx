@@ -38,19 +38,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const data = await api.post('/auth/login', { email, password }) as LoginResponse;
-    localStorage.setItem('token', data.token);
-    setUser(data.user);
-    setLoading(false);
-    return data;
+    try {
+      setLoading(true);
+      const data = await api.post('/auth/login', { email, password }) as LoginResponse;
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const register = async (userData: TRegisterRequest) => {
-    const data = await api.post('/auth/register', userData) as TRegisterResponse;
-    localStorage.setItem('token', data.token);
-    setUser(data.user);
-    setLoading(false);
-    return data;
+    try {
+      setLoading(true);
+      const data = await api.post('/auth/register', userData) as TRegisterResponse;
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = () => {
