@@ -99,3 +99,5 @@ Solution: Refactored the data flow so the TaskList component manages the tasks s
 - Replace token storage in localStorage with HTTP-only cookies to further improve authentication security and reduce XSS risk.
 - Implement infinite scrolling or pagination to improve performance and usability when the task list grows large.
 - Improve error handling by displaying user-friendly error messages and retry options in the UI
+- Token lifecycle: login/register keep tokens in localStorage with no 401 handling; 
+  add a global response interceptor to refresh token.
