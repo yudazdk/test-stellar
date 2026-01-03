@@ -3,6 +3,8 @@ import { Task, TTaskFormData } from '@/types';
 import { statusOptions, priorityOptions } from '@/constants';
 import Modal from '@/components/Modal';
 
+import './taskForm.css';
+
 interface ITaskListProps {
   tasks: Task[];
   loading: boolean;
@@ -80,11 +82,11 @@ export const TaskList = ({ tasks, loading, updateTask, deleteTask }: ITaskListPr
         {tasks.map((task) => (
           <div
             key={task.id}
-            className="p-4 transition-shadow border rounded-lg hover:shadow-md"
+            className="p-4 transition-shadow border rounded-lg hover:shadow-md dark:bg-slate-800"
           >
             {editingId === task.id ? (
               // Edit mode
-              <div className="space-y-4">
+              <div className="space-y-4 form-wrapper">
                 <div>
                   <label className="block mb-1 text-sm font-medium">Title</label>
                   <input

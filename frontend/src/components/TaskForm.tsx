@@ -41,7 +41,6 @@ export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded dark:bg-slate-700 dark:border-slate-600 dark:text-white"
           />
         </div>
         <div>
