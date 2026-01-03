@@ -12,6 +12,16 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+/**
+ * React context provider that manages authentication state and side effects.
+ *
+ * Initializes the current user if a token exists in localStorage by calling GET /auth/me.
+ * Exposes login and register helpers that call the API, persist the returned token, and set the user,
+ * and a logout helper that clears the token and user. Manages a loading flag during async operations.
+ *
+ * @param children - ReactNode children to render inside the provider.
+ * @returns JSX.Element - AuthContext.Provider supplying { user, loading, login, register, logout }.
+ */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<Nullable<User>>(null);
   const [loading, setLoading] = useState(true);

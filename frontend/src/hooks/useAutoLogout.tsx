@@ -5,6 +5,14 @@ interface AutoLogoutOptions {
   onIdle: () => void;
 }
 
+/**
+ * Hook that triggers `onIdle` after a period of user inactivity.
+ *
+ * @param options.timeoutInMinutes - Inactivity timeout in minutes.
+ * @param options.onIdle - Callback invoked when the timeout elapses.
+ * @remarks Listens for mouse/keyboard/scroll/touch events to reset the 
+ *          timer and cleans up listeners on unmount.
+ */
 export const useAutoLogout = ({ timeoutInMinutes, onIdle }: AutoLogoutOptions) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
