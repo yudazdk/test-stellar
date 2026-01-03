@@ -6,39 +6,45 @@ const prisma = new PrismaClient();
 
 export const getTasks = async (req: AuthRequest, res: Response) => {
   const userId = req.userId;
-  const { search, status } = req.query;
+  const { q: searchString, status, priority } = req.query;
 
-  let tasks;
-  if (search) {
-    const query = `SELECT * FROM Task WHERE userId = '${userId}' AND (title LIKE '%${search}%' OR description LIKE '%${search}%')`;
-    tasks = await prisma.$queryRawUnsafe(query);
-  } else {
-    tasks = await prisma.task.findMany({
-      where: {
-        userId,
-        ...(status && { status: status as string }),
-      },
+  const search =
+    typeof searchString === 'string' ? searchString.trim() : undefined;
+  const statusValue = typeof status === 'string' ? status : undefined;
+  const priorityValue = typeof priority === 'string' ? priority : undefined;
+
+  const tasks = await prisma.task.findMany({
+    where: {
+      userId,
+      ...(statusValue && { status: statusValue }),
+      ...(priorityValue && { priority: priorityValue }),
+      ...(search && {
+        OR: [
+          { title: { contains: search, mode: 'insensitive' } },
+          { description: { contains: search, mode: 'insensitive' } },
+        ],
+      }),
+    },
+  });
+
+  for (const task of tasks) {
+    const user = await prisma.user.findUnique({ where: { id: task.userId } });
+    (task as any).user = user;
+  }
+
+  for (const task of tasks) {
+    const assignments = await prisma.taskAssignment.findMany({
+      where: { taskId: task.id },
     });
-
-    for (const task of tasks) {
-      const user = await prisma.user.findUnique({ where: { id: task.userId } });
-      (task as any).user = user;
-    }
-
-    for (const task of tasks) {
-      const assignments = await prisma.taskAssignment.findMany({
-        where: { taskId: task.id },
+    
+    for (const assignment of assignments) {
+      const assignee = await prisma.user.findUnique({
+        where: { id: assignment.userId },
       });
-      
-      for (const assignment of assignments) {
-        const assignee = await prisma.user.findUnique({
-          where: { id: assignment.userId },
-        });
-        (assignment as any).user = assignee;
-      }
-      
-      (task as any).assignments = assignments;
+      (assignment as any).user = assignee;
     }
+    
+    (task as any).assignments = assignments;
   }
 
   res.json(tasks);
