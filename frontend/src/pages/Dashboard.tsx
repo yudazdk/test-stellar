@@ -3,9 +3,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { TaskList } from '@/components/TaskList';
 import { TaskForm } from '@/components/TaskForm';
 import Conditional from '@/components/Conditional';
-import { useTasks, useAuth, useDebounce } from '@/hooks';
+import { useTasks, useAuth, useDebounce, useAutoLogout } from '@/hooks';
 import { TTaskFormData, TaskFilterPreset, TaskFilters } from '@/types';
 import { priorityOptions, statusOptions } from '@/constants';
+import Modal from '@/components/Modal';
+import { IdleWarningModal } from '@/components/IdleWarningModal';
 
 export const Dashboard = () => {
   const [showForm, setShowForm] = useState(false);
@@ -20,6 +22,24 @@ export const Dashboard = () => {
   const [filters, setFilters] = useState<TaskFilters>(initialFilters);
   const [presets, setPresets] = useState<TaskFilterPreset[]>([]);
   const [presetName, setPresetName] = useState('');
+
+  const [showIdleTimeModal, setShowIdleTimeModal] = useState(false);
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  function handleCloseOnIdleTime() {
+    setShowIdleTimeModal(false);
+    handleLogout();
+  }
+
+  // Implement AutoLogout (e.g., 15 minutes)
+  useAutoLogout({ 
+    timeoutInMinutes: 0.5, 
+    onIdle: () => setShowIdleTimeModal(true), 
+  });
 
   // debounce ONLY q
   const debouncedQ = useDebounce(filters.q, 400);
@@ -86,144 +106,148 @@ export const Dashboard = () => {
       setFilters(preset.filters);
     }
   };
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
+  
   function toggleDarkMode() {
     setIsDark(prevIsDark => !prevIsDark);
     document.documentElement.classList.toggle("dark");
   }
 
   return (
-    <div className="min-h-screen p-8 bg-gray-50">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Dashboard</h1>
-            {user && (
-              <p className="mt-1 text-sm text-gray-600">
-                Welcome, {user.name || user.username}!
-              </p>
-            )}
+    <>
+      <div className="min-h-screen p-8 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold">Dashboard</h1>
+              {user && (
+                <p className="mt-1 text-sm text-gray-600">
+                  Welcome, {user.name || user.username}!
+                </p>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowForm(!showForm)}
+                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+              >
+                {showForm ? 'Cancel' : 'New Task'}
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setShowForm(!showForm)}
-              className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-            >
-              {showForm ? 'Cancel' : 'New Task'}
-            </button>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-        
-        {/* Dark mode button */}
-        <div className='flex flex-wrap gap-3 mb-4'>
-          <button onClick={toggleDarkMode} className='px-4 py-2 text-black bg-white rounded dark:bg-black dark:text-white'>
-            {isDark ? 'Light Mode' : 'Dark Mode'}
-          </button>
-        </div>  
 
-        {/* Filters */}
-        <div className="p-4 mb-6 bg-white rounded shadow-sm dark:bg-black dark:text-white">
-          <div className="grid gap-4 md:grid-cols-4">
-            <div>
-              <label className="block mb-1 text-sm font-medium">Status</label>
-              <select
-                value={filters.status}
-                onChange={(e) => handleFilterChange('status', e.target.value)}
-                className="w-full px-3 py-2 bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
-              >
-                <option value="">All</option>
-                {statusOptions.map((status) => (
-                  <option key={status} value={status}>{status}</option>
-                ))}
-              </select>
+          {/* Dark mode button */}
+          <div className='flex flex-wrap gap-3 mb-4'>
+            <button onClick={toggleDarkMode} className='px-4 py-2 text-black bg-white rounded dark:bg-black dark:text-white'>
+              {isDark ? 'Light Mode' : 'Dark Mode'}
+            </button>
+          </div>
+
+          {/* Filters */}
+          <div className="p-4 mb-6 bg-white rounded shadow-sm dark:bg-black dark:text-white">
+            <div className="grid gap-4 md:grid-cols-4">
+              <div>
+                <label className="block mb-1 text-sm font-medium">Status</label>
+                <select
+                  value={filters.status}
+                  onChange={(e) => handleFilterChange('status', e.target.value)}
+                  className="w-full px-3 py-2 bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
+                >
+                  <option value="">All</option>
+                  {statusOptions.map((status) => (
+                    <option key={status} value={status}>{status}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium">Priority</label>
+                <select
+                  value={filters.priority}
+                  onChange={(e) => handleFilterChange('priority', e.target.value)}
+                  className="w-full px-3 py-2 bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
+                >
+                  <option value="">All</option>
+                  {priorityOptions.map((priority) => (
+                    <option key={priority} value={priority}>{priority}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block mb-1 text-sm font-medium">Search</label>
+                <input
+                  type="text"
+                  value={filters.q}
+                  onChange={(e) => handleFilterChange('q', e.target.value)}
+                  placeholder="Search title or description"
+                  className="w-full px-3 py-2 bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block mb-1 text-sm font-medium">Priority</label>
-              <select
-                value={filters.priority}
-                onChange={(e) => handleFilterChange('priority', e.target.value)}
-                className="w-full px-3 py-2 bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
+            <div className="flex flex-wrap gap-3 mt-4">
+              <button
+                onClick={clearFilters}
+                className="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
               >
-                <option value="">All</option>
-                {priorityOptions.map((priority) => (
-                  <option key={priority} value={priority}>{priority}</option>
-                ))}
-              </select>
-            </div>
-            <div className="md:col-span-2">
-              <label className="block mb-1 text-sm font-medium">Search</label>
+                Clear filters
+              </button>
               <input
                 type="text"
-                value={filters.q}
-                onChange={(e) => handleFilterChange('q', e.target.value)}
-                placeholder="Search title or description"
-                className="w-full px-3 py-2 bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
+                value={presetName}
+                onChange={(e) => setPresetName(e.target.value)}
+                placeholder="Preset name"
+                className="px-3 py-2 text-sm bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
               />
+              <button
+                onClick={savePreset}
+                className="px-4 py-2 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
+              >
+                Save preset
+              </button>
+              {presets.length > 0 && (
+                <select
+                  onChange={(e) => applyPreset(e.target.value)}
+                  value={presetName}
+                  className="px-3 py-2 text-sm bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
+                >
+                  <option value="" disabled>Apply preset</option>
+                  {presets.map((preset) => (
+                    <option key={preset.name} value={preset.name}>{preset.name}</option>
+                  ))}
+                </select>
+              )}
             </div>
           </div>
-          <div className="flex flex-wrap gap-3 mt-4">
-            <button
-              onClick={clearFilters}
-              className="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-            >
-              Clear filters
-            </button>
-            <input
-              type="text"
-              value={presetName}
-              onChange={(e) => setPresetName(e.target.value)}
-              placeholder="Preset name"
-              className="px-3 py-2 text-sm bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
-            />
-            <button
-              onClick={savePreset}
-              className="px-4 py-2 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
-            >
-              Save preset
-            </button>
-            {presets.length > 0 && (
-              <select
-                onChange={(e) => applyPreset(e.target.value)}
-                value={presetName}
-                className="px-3 py-2 text-sm bg-white border rounded dark:bg-gray-900 dark:border-gray-700"
-              >
-                <option value="" disabled>Apply preset</option>
-                {presets.map((preset) => (
-                  <option key={preset.name} value={preset.name}>{preset.name}</option>
-                ))}
-              </select>
-            )}
-          </div>
-        </div>
 
-        <Conditional show={showForm}>
-          <div className="p-6 mb-8 bg-white rounded-lg shadow-md dark:bg-black dark:text-white">
-            <TaskForm onSubmit={handleCreateTask} />
+          <Conditional show={showForm}>
+            <div className="p-6 mb-8 bg-white rounded-lg shadow-md dark:bg-black dark:text-white">
+              <TaskForm onSubmit={handleCreateTask} />
+            </div>
+          </Conditional>
+
+          <div className="p-6 bg-white rounded-lg shadow-md dark:bg-black dark:text-white">
+            <h2 className="mb-4 text-xl font-semibold">Tasks</h2>
+            <TaskList
+              tasks={tasks}
+              loading={loading}
+              updateTask={updateTask}
+              deleteTask={deleteTask}
+            />
           </div>
-        </Conditional>
-        
-        <div className="p-6 bg-white rounded-lg shadow-md dark:bg-black dark:text-white">
-          <h2 className="mb-4 text-xl font-semibold">Tasks</h2>
-          <TaskList 
-            tasks={tasks} 
-            loading={loading}
-            updateTask={updateTask}
-            deleteTask={deleteTask} 
-          />
         </div>
       </div>
-    </div>
+      
+      <Modal show={showIdleTimeModal}>
+        <IdleWarningModal 
+          onStayLoggedIn={() => setShowIdleTimeModal(false)} 
+          onLogout={handleCloseOnIdleTime} 
+        />
+      </Modal>
+    </>    
   );
 };
 
