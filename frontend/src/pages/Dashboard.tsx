@@ -104,6 +104,7 @@ export const Dashboard = () => {
     const preset = presets.find((p) => p.name === name);
     if (preset) {
       setFilters(preset.filters);
+      setPresetName(preset.name);
     }
   };
   
