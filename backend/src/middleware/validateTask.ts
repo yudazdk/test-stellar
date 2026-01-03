@@ -22,14 +22,22 @@ const taskUpdateSchema = z
   .object({
     title: z.string().min(1, 'Title cannot be empty').optional(),
     description: z.string().optional(),
-    status: taskStatusEnum,
-    priority: taskPriorityEnum,
+    status: taskStatusEnum.optional(),
+    priority: taskPriorityEnum.optional(),
   })
   .strict()
   .refine(
     (data) => Object.keys(data).length > 0,
     'At least one field must be provided for update'
   );
+
+const taskQuerySchema = z
+  .object({
+    q: z.string().optional(),
+    status: taskStatusEnum.optional(),
+    priority: taskPriorityEnum.optional(),
+  })
+  .strict();
 
 type SchemaTarget = 'body' | 'params' | 'query';
 
@@ -55,4 +63,5 @@ const validate =
 export const validateTaskCreate = validate(taskCreateSchema);
 export const validateTaskUpdate = validate(taskUpdateSchema);
 export const validateTaskIdParam = validate(taskIdParamsSchema, 'params');
+export const validateTaskQuery = validate(taskQuerySchema, 'query');
 
