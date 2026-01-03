@@ -153,7 +153,7 @@ export const TaskList = ({ tasks, loading, updateTask, deleteTask }: ITaskListPr
               <div className="flex items-start justify-between dark:bg-slate-700">
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold">{task.title}</h3>
-                  <p className="mt-1 text-gray-600 dark:text-white" dangerouslySetInnerHTML={{ __html: task.description || '' }}></p>
+                  <p className="mt-1 text-gray-600 dark:text-white">{task.description}</p>
                   <div className="flex gap-2 mt-2">
                     <span className="px-2 py-1 text-sm text-blue-800 bg-blue-100 rounded">
                       {task.status}
