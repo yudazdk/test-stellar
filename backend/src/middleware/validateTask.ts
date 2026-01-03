@@ -13,8 +13,8 @@ const taskCreateSchema = z
   .object({
     title: z.string().min(1, 'Title is required'),
     description: z.string().optional(),
-    status: taskStatusEnum.optional(),
-    priority: taskPriorityEnum.optional(),
+    status: taskStatusEnum,
+    priority: taskPriorityEnum,
   })
   .strict();
 
@@ -22,8 +22,8 @@ const taskUpdateSchema = z
   .object({
     title: z.string().min(1, 'Title cannot be empty').optional(),
     description: z.string().optional(),
-    status: taskStatusEnum.optional(),
-    priority: taskPriorityEnum.optional(),
+    status: taskStatusEnum,
+    priority: taskPriorityEnum,
   })
   .strict()
   .refine(
