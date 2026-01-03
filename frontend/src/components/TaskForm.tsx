@@ -41,6 +41,7 @@ export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
             name="title"
             value={formData.title}
             onChange={handleChange}
+            required
           />
         </div>
         <div>
