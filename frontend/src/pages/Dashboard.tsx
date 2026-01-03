@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { TaskList } from '@/components/TaskList';
 import { TaskForm } from '@/components/TaskForm';
 import Conditional from '@/components/Conditional';
-import { useTasks, useAuth } from '@/hooks';
+import { useTasks, useAuth, useDebounce } from '@/hooks';
 import { TTaskFormData, TaskFilterPreset, TaskFilters } from '@/types';
 import { priorityOptions, statusOptions } from '@/constants';
 
@@ -15,12 +15,23 @@ export const Dashboard = () => {
     status: (searchParams.get('status') as TaskFilters['status']) || '',
     priority: (searchParams.get('priority') as TaskFilters['priority']) || '',
     q: searchParams.get('q') || '',
-  }), []);
+  }), []);  
    
   const [filters, setFilters] = useState<TaskFilters>(initialFilters);
   const [presets, setPresets] = useState<TaskFilterPreset[]>([]);
   const [presetName, setPresetName] = useState('');
-  const { createTask, tasks, loading, updateTask, deleteTask } = useTasks(filters);
+
+  // debounce ONLY q
+  const debouncedQ = useDebounce(filters.q, 400);
+
+  // effective filters sent to backend
+  const effectiveFilters = useMemo(() => ({
+    status: filters.status,
+    priority: filters.priority,
+    q: debouncedQ,
+  }), [filters.status, filters.priority, debouncedQ]);
+
+  const { createTask, tasks, loading, updateTask, deleteTask } = useTasks(effectiveFilters);
   const { logout, user } = useAuth();
   const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
@@ -40,9 +51,9 @@ export const Dashboard = () => {
     const params = new URLSearchParams();
     if (filters.status) params.set('status', filters.status);
     if (filters.priority) params.set('priority', filters.priority);
-    if (filters.q) params.set('q', filters.q);
+    if (debouncedQ) params.set('q', debouncedQ);
     setSearchParams(params, { replace: true });
-  }, [filters]);
+  }, [filters.status, filters.priority, debouncedQ]);
 
   const handleCreateTask = async (taskData: TTaskFormData) => {
     await createTask(taskData);
