@@ -13,8 +13,14 @@ export const useTasks = (filters?: any) => {
   const fetchTasks = async () => {
     setLoading(true);
     try {
-      const queryParams = new URLSearchParams(filters || {}).toString();
-      const data = await api.get(`/tasks?${queryParams}`) as Task[];
+      const params = new URLSearchParams();
+      Object.entries(filters || {}).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && String(value).trim() !== '') {
+          params.set(key, String(value));
+        }
+      });
+      const queryParams = params.toString();
+      const data = await api.get(`/tasks${`?${queryParams}` || ''}`) as Task[];
       setTasks(data);
     } catch (error) {
       console.error('Failed to fetch tasks', error);
