@@ -4,14 +4,13 @@ import { statusOptions, priorityOptions } from '@/constants';
 import Modal from '@/components/Modal';
 
 interface ITaskListProps {
-  filters?: any;
   tasks: Task[];
   loading: boolean;
   updateTask: (id: string, taskData: TTaskFormData) => Promise<Task>;
   deleteTask: (id: string) => Promise<void>;
 }
 
-export const TaskList = ({ filters, tasks, loading, updateTask, deleteTask }: ITaskListProps) => {
+export const TaskList = ({ tasks, loading, updateTask, deleteTask }: ITaskListProps) => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editFormData, setEditFormData] = useState<Partial<TTaskFormData>>({});
   

@@ -8,7 +8,6 @@ import { TTaskFormData } from '@/types';
 
 export const Dashboard = () => {
   const [showForm, setShowForm] = useState(false);
-  const [filters, setFilters] = useState({});
   const { createTask, tasks, loading, updateTask, deleteTask } = useTasks();
   const { logout, user } = useAuth();
   const navigate = useNavigate();
@@ -73,7 +72,6 @@ export const Dashboard = () => {
         <div className="p-6 bg-white rounded-lg shadow-md dark:bg-black dark:text-white">
           <h2 className="mb-4 text-xl font-semibold">Tasks</h2>
           <TaskList 
-            filters={filters} 
             tasks={tasks} 
             loading={loading}
             updateTask={updateTask}

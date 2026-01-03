@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { TTaskFormData } from '@/types';
-import { statusOptions, priorityOptions } from '@/constants';
+import { TTaskFormData, TaskPriority, TaskStatus } from '@/types';
 
 interface ITaskFormProps {
   onSubmit: (data: TTaskFormData) => void;
@@ -14,7 +13,10 @@ export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
     status: initialData?.status || 'TODO',
     priority: initialData?.priority || 'MEDIUM',
   });
-  
+
+  const statusOptions: TaskStatus[] = ['TODO', 'IN_PROGRESS', 'DONE'];
+  const priorityOptions: TaskPriority[] = ['LOW', 'MEDIUM', 'HIGH'];
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -30,32 +32,32 @@ export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Title</label>
+        <label className="block text-sm font-medium mb-1">Title</label>
         <input
           type="text"
           name="title"
           value={formData.title}
           onChange={handleChange}
-          className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
+          className="w-full border rounded px-3 py-2"
         />
       </div>
       <div>
-        <label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+        <label className="block text-sm font-medium mb-1">Description</label>
         <textarea
           name="description"
           value={formData.description}
           onChange={handleChange}
-          className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
+          className="w-full border rounded px-3 py-2"
           rows={4}
         />
       </div>
       <div>
-        <label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+        <label className="block text-sm font-medium mb-1">Status</label>
         <select
           name="status"
           value={formData.status}
           onChange={handleChange}
-          className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
+          className="w-full border rounded px-3 py-2"
         >
           {statusOptions.map((status) => (
             <option key={status} value={status}>
@@ -65,12 +67,12 @@ export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
         </select>
       </div>
       <div>
-        <label className="block mb-1 text-sm font-medium text-gray-900 dark:text-gray-100">Priority</label>
+        <label className="block text-sm font-medium mb-1">Priority</label>
         <select
           name="priority"
           value={formData.priority}
           onChange={handleChange}
-          className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
+          className="w-full border rounded px-3 py-2"
         >
           {priorityOptions.map((priority) => (
             <option key={priority} value={priority}>
@@ -81,7 +83,7 @@ export const TaskForm = ({ onSubmit, initialData }: ITaskFormProps) => {
       </div>
       <button
         type="submit"
-        className="w-full py-2 text-white bg-blue-500 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500"
+        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
       >
         {initialData ? 'Update Task' : 'Create Task'}
       </button>
