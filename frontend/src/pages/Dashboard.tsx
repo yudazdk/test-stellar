@@ -10,11 +10,13 @@ import { priorityOptions, statusOptions } from '@/constants';
 export const Dashboard = () => {
   const [showForm, setShowForm] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+
   const initialFilters: TaskFilters = useMemo(() => ({
     status: (searchParams.get('status') as TaskFilters['status']) || '',
     priority: (searchParams.get('priority') as TaskFilters['priority']) || '',
     q: searchParams.get('q') || '',
-  }), []); 
+  }), []);
+   
   const [filters, setFilters] = useState<TaskFilters>(initialFilters);
   const [presets, setPresets] = useState<TaskFilterPreset[]>([]);
   const [presetName, setPresetName] = useState('');
@@ -48,8 +50,8 @@ export const Dashboard = () => {
   };
 
   const handleFilterChange = (key: keyof TaskFilters, value: string) => {
-    setFilters((prev) => ({
-      ...prev,
+    setFilters((prevFilters) => ({
+      ...prevFilters,
       [key]: value,
     }));
   };
