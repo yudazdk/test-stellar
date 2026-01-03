@@ -6,11 +6,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { useAuth } from '@/hooks/useAuth';
 
 function App() {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const { user } = useAuth();
 
   return (
     <ErrorBoundary>

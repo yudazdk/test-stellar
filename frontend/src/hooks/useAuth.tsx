@@ -8,6 +8,7 @@ type AuthContextValue = {
   login: (email: string, password: string) => Promise<LoginResponse>;
   register: (userData: TRegisterRequest) => Promise<TRegisterResponse>;
   logout: () => void;
+  setLoading: (loading: boolean) => void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -81,7 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, setLoading }}>
       {children}
     </AuthContext.Provider>
   );
