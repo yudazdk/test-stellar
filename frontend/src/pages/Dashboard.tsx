@@ -38,7 +38,7 @@ export const Dashboard = () => {
     const params = new URLSearchParams();
     if (filters.status) params.set('status', filters.status);
     if (filters.priority) params.set('priority', filters.priority);
-    if (filters.q) params.set('q', filters.q);
+    if (filters.q) params.set('search', filters.q);
     setSearchParams(params, { replace: true });
   }, [filters]);
 
