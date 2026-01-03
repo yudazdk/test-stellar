@@ -16,7 +16,9 @@ export const TaskList = ({ tasks, loading, updateTask, deleteTask }: ITaskListPr
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editFormData, setEditFormData] = useState<Partial<TTaskFormData>>({});
   
+  // Toggle delete confirmation modal visibility
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  // Keep pending delete id while waiting for confirmation without triggering re-renders
   const taskIdToDeleteRef = useRef("");
 
   const handleEditClick = (task: Task) => {
@@ -184,6 +186,8 @@ export const TaskList = ({ tasks, loading, updateTask, deleteTask }: ITaskListPr
           </div>
         ))}
       </div>
+      
+      {/* Confirm deletion modal */}
       <Modal show={showConfirmDelete}>
         <>
           <h1 className='mt-3 font-bold '>Are you sure you want to delete this task ?</h1>

@@ -5,6 +5,16 @@ interface IdleWarningModalProps {
   onLogout: () => void;
 }
 
+/**
+ * IdleWarningModal
+ *
+ * Displays a centered modal warning the user they have been idle, showing a 30-second countdown.
+ * Automatically calls onLogout when the timer reaches 0. Provides buttons to stay logged in or log out immediately.
+ *
+ * @param onStayLoggedIn - Callback invoked when the user chooses to remain logged in.
+ * @param onLogout - Callback invoked when the user logs out manually or when the countdown expires.
+ * @returns JSX.Element - The idle warning modal element.
+ */
 export const IdleWarningModal = ({ onStayLoggedIn, onLogout }: IdleWarningModalProps) => {
   const [secondsLeft, setSecondsLeft] = useState(60);
 

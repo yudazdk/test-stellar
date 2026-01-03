@@ -1,17 +1,24 @@
+/**
+ * Renders children into a DOM portal (#todo-modal) with a semi-opaque backdrop.
+ *
+ * The component returns null when `show` is false. When visible, it mounts an overlay
+ * and a centered modal container using createPortal into the element with id "todo-modal".
+ *
+ * @param props.show - Toggle visibility of the modal. If false, nothing is rendered.
+ * @param props.children - Content to render inside the modal container.
+ * @returns A React portal rendering the backdrop and modal content, or null when hidden.
+ *
+ * Note: Requires an element with id "todo-modal" to exist in the document.
+ */
 import { type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 type TPortalProps = {
   show: boolean;
-  className?: string;
   children: ReactNode;
 };
 
-/**
- *
- * @param props
- * @returns
- */
+
 export default function Modal(props: TPortalProps) {
   const { children, show } = props;
 

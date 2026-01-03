@@ -41,7 +41,7 @@ export const Dashboard = () => {
     onIdle: () => setShowIdleTimeModal(true), 
   });
 
-  // debounce ONLY q
+  // debounce only q
   const debouncedQ = useDebounce(filters.q, 400);
 
   // effective filters sent to backend
@@ -239,8 +239,9 @@ export const Dashboard = () => {
             />
           </div>
         </div>
-      </div>
+      </div>      
       
+      {/* Idle timeout warning modal */}
       <Modal show={showIdleTimeModal}>
         <IdleWarningModal 
           onStayLoggedIn={() => setShowIdleTimeModal(false)} 
