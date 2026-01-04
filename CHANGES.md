@@ -93,10 +93,8 @@ Added proper user feedback for failed login attempts (e.g. incorrect username or
 - The modal provides clear user feedback and explicit confirmation/cancellation actions.
 - Improved overall usability and safety of destructive actions.
 
-### Auto logout
-- Implemented automatic logout behavior when authentication/session expires.
-- Prevents users from remaining in an invalid or partially authenticated state.
-- Improves security.
+### Auto logout warning modal
+- Added idle timeout warning modal and automatic logout for inactive users.
 
 ## Suggested Future Improvements
 - Replace token storage in localStorage with HTTP-only cookies to further improve authentication security and reduce XSS risk.
