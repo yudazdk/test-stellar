@@ -104,3 +104,4 @@ Added proper user feedback for failed login attempts (e.g. incorrect username or
 - Improve error handling by displaying user-friendly error messages and retry options in the UI
 - Token lifecycle: login/register keep tokens in localStorage with no 401 handling; 
   add a global response interceptor to refresh token.
+- Limit failed login attempts.  
