@@ -15,7 +15,10 @@ After adding a task, it did not appear in the task list until a full refresh.
 The issue was caused by duplicated task state management.
 
 Solution: Refactored the data flow so the TaskList component manages the tasks state, ensuring proper synchronization after create       
-          operations.          
+          operations.
+
+### Authentication Error Feedback
+Added proper user feedback for failed login attempts (e.g. incorrect username or password), which previously did not display an error message.                    
 
 ## Code improvements
 
